@@ -53,6 +53,17 @@ export const fetchEvents = async (navigate) => {
   }
 };
 
+export const createEvent = async (formData, setStatusCreate) => {
+  try {
+    const { data } = await axios.post(`${API_HOST}/event/createEvent`, formData);
+    if (data) return setStatusCreate(true);
+    return setStatusCreate(false);
+  } catch (error) {
+    console.log(`%c ${error}`, 'background: yellow; color: red');
+    return setStatusCreate(false);
+  }
+};
+
 /** *
  * @param _id - the id of event
  * @param dataUpdate - the data update event, it's can be any, this case i'm update status published field

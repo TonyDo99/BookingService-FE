@@ -1,4 +1,5 @@
 import { LoadingButton } from '@mui/lab';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   Box,
   FormControl,
@@ -10,9 +11,14 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import { ErrorMessage, Form, Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
+import { createEvent } from '../../api/index';
+import PopupModal from './Popup';
 
 const style = {
   position: 'absolute',
@@ -29,26 +35,59 @@ const style = {
 
 // ----------------------------------------------------------------------
 const SignInSchema = Yup.object().shape({
-  slug: Yup.string().required(),
-  name: Yup.string().required(),
-  description: Yup.string().required(),
-  poster: Yup.string().required(),
+  slug: Yup.string().required('slug field cannot be blank *'),
+  name: Yup.string().required('name field cannot be blank *'),
+  description: Yup.string().required('description field cannot be blank *'),
+  poster: Yup.string().required('poster field cannot be blank *'),
 });
 
 export default function CreateEventForm() {
   const [open, setOpen] = useState(true);
+
+  const [statusCreate, setStatusCreate] = useState(null);
+
+  const [startDate, setStartDate] = useState(null);
+
+  const [endDate, setEndDate] = useState(null);
+
   return (
     <>
-      <Modal className="bg-white" open={open}>
+      <Modal className="bg-white" open={open} onClose={() => setOpen(false)}>
         <Box sx={style}>
           <Formik
-            initialValues={{ slug: '', name: '', description: '', poster: '' }}
+            initialValues={{ slug: '', name: '', description: '', poster: '', published: true }}
             validationSchema={SignInSchema}
-            onSubmit={async (values, actions) => {}}
+            onSubmit={async (values) => {
+              await createEvent(
+                {
+                  ...values,
+                  published: JSON.parse(values.published),
+                  startDate: `${startDate.$y}-${startDate.$M + 1}-${startDate.$D}`,
+                  endDate: `${startDate.$y}-${startDate.$M + 1}-${startDate.$D}`,
+                },
+                setStatusCreate
+              );
+            }}
           >
             {(props) => (
               <Form onSubmit={props.handleSubmit}>
                 <Stack spacing={2}>
+                  <TextField
+                    label="name"
+                    name="name"
+                    span="name"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.name}
+                    type="text"
+                  />
+                  <span
+                    style={{
+                      color: 'red',
+                    }}
+                  >
+                    <ErrorMessage name="name" />
+                  </span>
                   <TextField
                     label="slug"
                     name="slug"
@@ -56,26 +95,14 @@ export default function CreateEventForm() {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.slug}
-                    type="text"
+                    type="textarea"
                   />
                   <span
                     style={{
-                      color: 'rgb(248 113 113 / var(--tw-text-opacity))',
+                      color: 'red',
                     }}
                   >
                     <ErrorMessage name="slug" />
-                  </span>
-                  <TextField
-                    label="description"
-                    name="description"
-                    span="description"
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    value={props.values.description}
-                    type="textarea"
-                  />
-                  <span className="animate-pulse text-red-400 mt-1">
-                    <ErrorMessage name="description" />
                   </span>
 
                   <TextField
@@ -85,33 +112,67 @@ export default function CreateEventForm() {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.poster}
-                    type="number"
+                    type="text"
                   />
-                  <span className="animate-pulse text-red-400 mt-1">
+                  <span
+                    style={{
+                      color: 'red',
+                    }}
+                  >
                     <ErrorMessage name="poster" />
                   </span>
                   <TextField
-                    label="Quantity"
-                    name="quantity"
-                    span="quantity"
+                    label="description"
+                    name="description"
+                    span="description"
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    value={props.values.quantity}
-                    type="number"
+                    value={props.values.description}
+                    type="text"
                   />
-                  <span className="animate-pulse text-red-400 mt-1">
-                    <ErrorMessage name="quantity" />
+                  <span
+                    style={{
+                      color: 'red',
+                    }}
+                  >
+                    <ErrorMessage name="description" />
                   </span>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Pick start date"
+                      value={startDate}
+                      onChange={(newValue) => {
+                        setStartDate(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                      inputFormat="YYYY-MM-DD"
+                    />
+                  </LocalizationProvider>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Pick end date"
+                      value={endDate}
+                      onChange={(newValue) => {
+                        setEndDate(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                      inputFormat="YYYY-MM-DD"
+                    />
+                  </LocalizationProvider>
 
                   <FormControl>
                     <FormLabel id="demo-radio-buttons-group-label">Status</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultChecked
-                      name="radio-buttons-group"
+                      name="published"
+                      defaultValue
+                      value={props.values.published}
+                      onChange={props.handleChange}
                     >
-                      <FormControlLabel value="true" control={<Radio />} defaultChecked label={'public'} />
-                      <FormControlLabel value="false" control={<Radio />} label={'unpublished'} />
+                      <FormControlLabel value control={<Radio />} label={'public'} />
+                      <FormControlLabel value={false} control={<Radio />} label={'unpublished'} />
                     </RadioGroup>
                   </FormControl>
                 </Stack>
@@ -123,6 +184,7 @@ export default function CreateEventForm() {
           </Formik>
         </Box>
       </Modal>
+      {statusCreate !== null && <PopupModal status={statusCreate} setStatusRegister={setStatusCreate} />}
     </>
   );
 }
