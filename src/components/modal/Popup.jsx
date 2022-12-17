@@ -5,6 +5,7 @@ export default function PopupModal({ status, setStatusRegister }) {
   const [open, setOpen] = useState(true);
   setTimeout(() => {
     setStatusRegister(null);
+    window.location.reload();
   }, 3000);
   return (
     <Modal

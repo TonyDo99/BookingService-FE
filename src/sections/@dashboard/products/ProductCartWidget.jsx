@@ -1,7 +1,11 @@
+import { useState, useEffect } from 'react';
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Badge } from '@mui/material';
 // component
+import { useNavigate } from 'react-router-dom';
+import { findUser } from '../../../api';
 import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
@@ -30,9 +34,19 @@ const StyledRoot = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function CartWidget() {
+  const [account, setAccount] = useState({});
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      setAccount(await findUser(navigate));
+    })();
+  }, [navigate]);
+
   return (
     <StyledRoot>
-      <Badge showZero badgeContent={0} color="error" max={99}>
+      <Badge showZero={false} badgeContent={5} color="primary" max={99}>
         <Iconify icon="eva:shopping-cart-fill" width={24} height={24} />
       </Badge>
     </StyledRoot>

@@ -66,8 +66,8 @@ export default function EventsClient({ event, index }) {
 
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
-      <a href={`/home/events/${_id}/listTickets`}>
-        <Card sx={{ position: 'relative' }}>
+      <Card sx={{ position: 'relative' }}>
+        <a href={`/home/events/${_id}/listTickets`}>
           <StyledCardMedia
             sx={{
               ...((latestPostLarge || latestPost) && {
@@ -184,8 +184,8 @@ export default function EventsClient({ event, index }) {
               ))}
             </StyledInfo>
           </CardContent>
-        </Card>
-      </a>
+        </a>
+      </Card>
     </Grid>
   );
 }

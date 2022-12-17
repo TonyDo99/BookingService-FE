@@ -16,6 +16,32 @@ export const fetchUser = async (navigate) => {
   }
 };
 
+/**
+ * @param setAuthen - authen state verify
+ * @return - user information
+ * @example {
+    "_id": "54a22559-2b59-4d41-b044-837acc4b9436",
+    "mobilePhone": "0826240270",
+    "email": "dotanphat20@gmail.com",
+    "fullName": "Dreamer",
+    "role": "admin_user"
+}
+ */
+
+export const findUser = async (navigate) => {
+  try {
+    axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessKey')}`;
+    const { data } = await axios.get(`${API_HOST}/user/find`);
+    return data;
+  } catch (error) {
+    console.log(`%c ${error}`, 'background: yellow; color: red');
+    localStorage.clear();
+    return navigate('/login', {
+      replace: true,
+    });
+  }
+};
+
 export const login = async (dataForm) => {
   try {
     const { data } = await axios.post(`${API_HOST}/login`, dataForm);
@@ -53,6 +79,31 @@ export const fetchEvents = async (navigate) => {
   }
 };
 
+/**
+ * @param _id - specific id of the event
+ * @return array of event object
+ * @example [
+ * {
+      "_id": "f08029ba-cbf1-4bc7-98db-7715d726aa57",
+      "name": "Ticket star",
+      "description": "14:00-17:00",
+      "price": 3000,
+      "quantity": 99
+      ticket: []
+    },
+  ]
+ */
+
+export const fetchEventById = async (_id) => {
+  try {
+    const { data } = await axios.get(`${API_HOST}/event/${_id}`);
+    return data;
+  } catch (error) {
+    console.log(`%c ${error}`, 'background: yellow; color: red');
+    return [];
+  }
+};
+
 export const createEvent = async (formData, setStatusCreate) => {
   try {
     const { data } = await axios.post(`${API_HOST}/event/createEvent`, formData);
@@ -74,6 +125,20 @@ export const updateEvent = async (_id, dataUpdate) => {
     await axios.patch(`${API_HOST}/event/updateEvent/${_id}`, dataUpdate);
   } catch (error) {
     console.log(`%c ${error}`, 'background: yellow; color: red');
+  }
+};
+
+export const deleteEvent = async (_id, setStatusDelete) => {
+  try {
+    const { data } = await axios.delete(`${API_HOST}/event/deleteEvent/${_id}`);
+    if (data.status) {
+      setStatusDelete(true);
+    } else {
+      setStatusDelete(false);
+    }
+  } catch (error) {
+    console.log(`%c ${error}`, 'background: yellow; color: red');
+    setStatusDelete(false);
   }
 };
 
@@ -113,53 +178,27 @@ export const buyTicket = async (ticketId, formData) => {
   }
 };
 
-/**
- * @param _id - specific id of the event
- * @return array of event object
- * @example [
- * {
-      "_id": "f08029ba-cbf1-4bc7-98db-7715d726aa57",
-      "name": "Ticket star",
-      "description": "14:00-17:00",
-      "price": 3000,
-      "quantity": 99
-      ticket: []
-    },
-  ]
- */
-
-export const fetchEventById = async (_id) => {
+export const createTicket = async (formData, setStatusCreate) => {
   try {
-    const { data } = await axios.get(`${API_HOST}/event/${_id}`);
-    return data;
+    const { data } = await axios.post(`${API_HOST}/ticket/createTicket`, formData);
+    if (data) return setStatusCreate(true);
+    return setStatusCreate(false);
   } catch (error) {
     console.log(`%c ${error}`, 'background: yellow; color: red');
-    return [];
+    return setStatusCreate(false);
   }
 };
 
-/**
- * @param setAuthen - authen state verify
- * @return - user information
- * @example {
-    "_id": "54a22559-2b59-4d41-b044-837acc4b9436",
-    "mobilePhone": "0826240270",
-    "email": "dotanphat20@gmail.com",
-    "fullName": "Dreamer",
-    "role": "admin_user"
-}
- */
-
-export const findUser = async (navigate) => {
+export const deleteTicket = async (_id, setStatusDelete) => {
   try {
-    axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessKey')}`;
-    const { data } = await axios.get(`${API_HOST}/user/find`);
-    return data;
+    const { data } = await axios.delete(`${API_HOST}/ticket/deleteTicket/${_id}`);
+    if (data.status) {
+      setStatusDelete(true);
+    } else {
+      setStatusDelete(false);
+    }
   } catch (error) {
     console.log(`%c ${error}`, 'background: yellow; color: red');
-    localStorage.clear();
-    return navigate('/login', {
-      replace: true,
-    });
+    setStatusDelete(false);
   }
 };

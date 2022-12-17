@@ -24,12 +24,13 @@ import {
 // components
 import { useNavigate } from 'react-router-dom';
 import { CreateEventForm } from '../components/modal';
-import { fetchEvents, updateEvent } from '../api/index';
+import { deleteEvent, fetchEvents, updateEvent } from '../api/index';
 // import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import PopupModal from '../components/modal/Popup';
 
 // ----------------------------------------------------------------------
 
@@ -95,6 +96,10 @@ export default function EventPage() {
 
   const [eventsList, setEventsList] = useState([]);
 
+  const [event, setEvent] = useState('');
+
+  const [statusDelete, setStatusDelete] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -108,7 +113,8 @@ export default function EventPage() {
     await updateEvent(_id, status);
   };
 
-  const handleOpenMenu = (event) => {
+  const handleOpenMenu = (event, _id) => {
+    setEvent(_id);
     setOpen(event.currentTarget);
   };
 
@@ -129,6 +135,10 @@ export default function EventPage() {
       return;
     }
     setSelected([]);
+  };
+
+  const handleDeleteEvent = async (idEvent, setStatusDelete) => {
+    await deleteEvent(idEvent, setStatusDelete);
   };
 
   const handleClick = (event, name) => {
@@ -244,7 +254,7 @@ export default function EventPage() {
                         <TableCell align="center">{ticket.length}</TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <IconButton size="large" color="inherit" onClick={(e) => handleOpenMenu(e, _id)}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
@@ -301,6 +311,7 @@ export default function EventPage() {
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
+        onClick={() => handleDeleteEvent(event, setStatusDelete)}
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{
@@ -326,7 +337,10 @@ export default function EventPage() {
         </MenuItem>
       </Popover>
 
-      {openForm && <CreateEventForm />}
+      {/* Create Event Modal Form */}
+      {openForm && <CreateEventForm open={openForm} setOpen={setOpenForm} />}
+
+      {statusDelete !== null && <PopupModal status={statusDelete} setStatusRegister={setStatusDelete} />}
     </>
   );
 }

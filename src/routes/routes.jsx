@@ -10,7 +10,6 @@ import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import Page404 from '../pages/Page404';
 import ProductsPage from '../pages/ProductsPage';
-import DashboardAppPage from '../pages/DashboardAppPage';
 
 // ---------------------------------------------------------------- CLIENT PAGE ------
 import HomePage from '../pages/client/EventPage';
@@ -25,11 +24,10 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'event', element: <EventPage /> },
-        { path: 'products', element: <ProductsPage /> },
+        { element: <Navigate to="/dashboard/users" />, index: true },
+        { path: 'users', element: <UserPage /> },
+        { path: 'events', element: <EventPage /> },
+        { path: 'tickets', element: <ProductsPage /> },
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],

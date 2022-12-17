@@ -41,9 +41,7 @@ const SignInSchema = Yup.object().shape({
   poster: Yup.string().required('poster field cannot be blank *'),
 });
 
-export default function CreateEventForm() {
-  const [open, setOpen] = useState(true);
-
+export default function CreateEventForm({ open, setOpen }) {
   const [statusCreate, setStatusCreate] = useState(null);
 
   const [startDate, setStartDate] = useState(null);
@@ -62,8 +60,10 @@ export default function CreateEventForm() {
                 {
                   ...values,
                   published: JSON.parse(values.published),
-                  startDate: `${startDate.$y}-${startDate.$M + 1}-${startDate.$D}`,
-                  endDate: `${startDate.$y}-${startDate.$M + 1}-${startDate.$D}`,
+                  startDate: `${startDate.$y}-${startDate.$M + 1}-${
+                    startDate.$D < 10 ? `0${startDate.$D}` : startDate.$D
+                  }`,
+                  endDate: `${endDate.$y}-${endDate.$M + 1}-${endDate.$D < 10 ? `0${endDate.$D}` : endDate.$D}`,
                 },
                 setStatusCreate
               );
