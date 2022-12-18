@@ -64,23 +64,9 @@ export default function ShopProductCard({ ticket }) {
               Delete
             </Button>
           </div>
-
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="subtitle1">Qty: +{quantity}</Typography>
-            <Typography variant="subtitle1">
-              <Typography
-                component="span"
-                variant="body1"
-                sx={{
-                  color: 'text.disabled',
-                  textDecoration: 'line-through',
-                }}
-              >
-                {price && fCurrency(price)}
-              </Typography>
-              &nbsp;
-              {fCurrency(price)}
-            </Typography>
+            <Typography variant="subtitle1">Qty: {quantity}</Typography>
+            {fCurrency(price)}
           </Stack>
         </Stack>
       </Card>

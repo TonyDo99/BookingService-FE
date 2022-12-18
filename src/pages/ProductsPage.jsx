@@ -46,19 +46,7 @@ export default function ProductsPage() {
           </Button>
         </Stack>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
-        </Stack>
-
         <ProductList tickets={tickets} />
-        <ProductCartWidget />
       </Container>
       {openForm && <CreateTicketForm open={openForm} setOpen={setOpenForm} />}
     </>
