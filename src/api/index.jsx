@@ -120,11 +120,14 @@ export const createEvent = async (formData, setStatusCreate) => {
  * @param dataUpdate - the data update event, it's can be any, this case i'm update status published field
  */
 
-export const updateEvent = async (_id, dataUpdate) => {
+export const updateEvent = async (_id, dataUpdate, setStatusUpdate) => {
   try {
-    await axios.patch(`${API_HOST}/event/updateEvent/${_id}`, dataUpdate);
+    const { data } = await axios.patch(`${API_HOST}/event/updateEvent/${_id}`, dataUpdate);
+    if (data) return setStatusUpdate(true);
+    return setStatusUpdate(false);
   } catch (error) {
     console.log(`%c ${error}`, 'background: yellow; color: red');
+    return setStatusUpdate(false);
   }
 };
 

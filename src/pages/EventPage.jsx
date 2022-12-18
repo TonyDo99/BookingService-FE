@@ -8,7 +8,6 @@ import {
   Stack,
   Paper,
   Button,
-  Popover,
   Checkbox,
   TableRow,
   MenuItem,
@@ -20,10 +19,11 @@ import {
   TableContainer,
   TablePagination,
   Switch,
+  Menu,
 } from '@mui/material';
 // components
 import { useNavigate } from 'react-router-dom';
-import { CreateEventForm } from '../components/modal';
+import { CreateEventForm, UpdateEventForm } from '../components/modal';
 import { deleteEvent, fetchEvents, updateEvent } from '../api/index';
 // import Label from '../components/label';
 import Iconify from '../components/iconify';
@@ -98,7 +98,9 @@ export default function EventPage() {
 
   const [event, setEvent] = useState('');
 
-  const [statusDelete, setStatusDelete] = useState(null);
+  const [statusResponse, setStatusReponse] = useState(null);
+
+  const [openEdit, setOpenEdit] = useState(false);
 
   const navigate = useNavigate();
 
@@ -110,7 +112,7 @@ export default function EventPage() {
 
   const handleSwitch = async (_id, status, index) => {
     setEventsList([...eventsList.slice(0, index), { ...eventsList[index], ...status }, ...eventsList.slice(index + 1)]);
-    await updateEvent(_id, status);
+    await updateEvent(_id, status, setStatusReponse);
   };
 
   const handleOpenMenu = (event, _id) => {
@@ -137,8 +139,12 @@ export default function EventPage() {
     setSelected([]);
   };
 
-  const handleDeleteEvent = async (idEvent, setStatusDelete) => {
-    await deleteEvent(idEvent, setStatusDelete);
+  const handleDeleteEvent = async (type, idEvent, setStatusReponse) => {
+    if (type === 'edit') {
+      setOpenEdit(true);
+    } else {
+      await deleteEvent(idEvent, setStatusReponse);
+    }
   };
 
   const handleClick = (event, name) => {
@@ -306,41 +312,31 @@ export default function EventPage() {
           />
         </Card>
       </Container>
-
-      <Popover
+      <Menu
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
-        onClick={() => handleDeleteEvent(event, setStatusDelete)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
+        aria-haspopup="listbox"
+        aria-controls="lock-menu"
       >
-        <MenuItem>
+        <MenuItem onClick={() => handleDeleteEvent('edit', event, setStatusReponse)}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick={() => handleDeleteEvent('delete', event, setStatusReponse)}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>
-      </Popover>
+      </Menu>
 
       {/* Create Event Modal Form */}
       {openForm && <CreateEventForm open={openForm} setOpen={setOpenForm} />}
+      {openEdit && (
+        <UpdateEventForm open={openEdit} setOpen={setOpenEdit} eventId={event} seStatusUpdate={setStatusReponse} />
+      )}
 
-      {statusDelete !== null && <PopupModal status={statusDelete} setStatusRegister={setStatusDelete} />}
+      {statusResponse !== null && <PopupModal status={statusResponse} setStatusRegister={setStatusReponse} />}
     </>
   );
 }

@@ -6,7 +6,6 @@ import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/mat
 import { fDate } from '../../../utils/formatTime';
 //
 import SvgColor from '../../../components/svg-color';
-import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +45,7 @@ const StyledCover = styled('img')({
   top: 0,
   width: '100%',
   height: '100%',
-  objectFit: 'cover',
+  objectFit: 'none',
   position: 'absolute',
 });
 
@@ -66,6 +65,9 @@ export default function EventsClient({ event, index }) {
 
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
+      <Typography variant="h4" sx={{ mb: 5 }}>
+        Events
+      </Typography>
       <Card sx={{ position: 'relative' }}>
         <a href={`/home/events/${_id}/listTickets`}>
           <StyledCardMedia
@@ -91,7 +93,7 @@ export default function EventsClient({ event, index }) {
           >
             <SvgColor
               color="paper"
-              src="/assets/icons/shape-avatar.svg"
+              src="/assets/images/event/event.png"
               sx={{
                 width: 80,
                 height: 36,
@@ -104,7 +106,7 @@ export default function EventsClient({ event, index }) {
             />
             <StyledAvatar
               alt={name}
-              src={`/assets/images/avatars/avatar_${index + 1}.jpg`}
+              src="/assets/images/event/event.png"
               sx={{
                 ...((latestPostLarge || latestPost) && {
                   zIndex: 9,
@@ -116,7 +118,7 @@ export default function EventsClient({ event, index }) {
               }}
             />
 
-            <StyledCover alt={slug} src={`/assets/images/covers/cover_${index + 1}.jpg`} />
+            <StyledCover alt={slug} src="/assets/images/event/event.png" />
           </StyledCardMedia>
 
           <CardContent
@@ -130,10 +132,14 @@ export default function EventsClient({ event, index }) {
             }}
           >
             <div className="flex items-center justify-between">
-              <Typography gutterBottom variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
+              <Typography
+                gutterBottom
+                variant="caption"
+                sx={{ color: 'greenyellow', display: 'block', fontSize: '14px' }}
+              >
                 Start: {fDate(startDate)}
               </Typography>
-              <Typography gutterBottom variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
+              <Typography gutterBottom variant="caption" sx={{ color: 'red', fontSize: '14px', display: 'block' }}>
                 End: {fDate(endDate)}
               </Typography>
             </div>
@@ -177,10 +183,7 @@ export default function EventsClient({ event, index }) {
                       color: 'grey.500',
                     }),
                   }}
-                >
-                  <Iconify icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} />
-                  <Typography variant="caption">{info.number}</Typography>
-                </Box>
+                />
               ))}
             </StyledInfo>
           </CardContent>

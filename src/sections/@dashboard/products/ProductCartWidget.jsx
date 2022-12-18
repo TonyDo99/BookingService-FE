@@ -35,7 +35,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function CartWidget() {
-  const [account, setAccount] = useState(0);
+  const [account, setAccount] = useState({});
 
   const [openCart, setOpenCart] = useState(false);
   const navigate = useNavigate();
@@ -45,12 +45,11 @@ export default function CartWidget() {
       setAccount(await findUser(navigate));
     })();
   }, [navigate]);
-
   return (
     <StyledRoot>
-      {account && (
+      {Object.keys(account).length && (
         <Badge
-          showZero={false}
+          showZero={account.tickets.length === 0}
           badgeContent={account.tickets.length}
           color="primary"
           max={99}
@@ -59,7 +58,7 @@ export default function CartWidget() {
           <Iconify icon="eva:shopping-cart-fill" width={24} height={24} />
         </Badge>
       )}
-      {openCart && <TemporaryDrawer open={openCart} setOpen={setOpenCart} />}
+      {openCart && <TemporaryDrawer open={openCart} setOpen={setOpenCart} tickets={account?.tickets} />}
     </StyledRoot>
   );
 }

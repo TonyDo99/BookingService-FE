@@ -9,8 +9,6 @@ import { styled } from '@mui/material/styles';
 // components
 import { AccountContext } from '../../context/AccountContext';
 import { findUser } from '../../api/index';
-import LanguagePopover from '../dashboard/header/LanguagePopover';
-import NotificationsPopover from '../dashboard/header/NotificationsPopover';
 import AccountPopover from '../dashboard/header/AccountPopover';
 
 // ----------------------------------------------------------------------
@@ -63,8 +61,6 @@ export default function Home() {
                 sm: 1,
               }}
             >
-              <LanguagePopover />
-              <NotificationsPopover />
               <AccountPopover />
             </Stack>
           </Stack>

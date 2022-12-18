@@ -16,7 +16,7 @@ const StyledProductImg = styled('img')({
   top: 0,
   width: '100%',
   height: '100%',
-  objectFit: 'cover',
+  objectFit: 'none',
   position: 'absolute',
 });
 
@@ -47,7 +47,7 @@ export default function TicketCard({ ticket }) {
           >
             End: {fDate(date)}
           </Label>
-          <StyledProductImg alt={name} src={'/assets/images/products/product_1.jpg'} />
+          <StyledProductImg alt={name} src={'/assets/images/ticket/ticket.png'} />
         </Box>
 
         <Stack spacing={2} sx={{ p: 3 }}>
