@@ -20,6 +20,7 @@ import { ErrorMessage, Form, Formik } from 'formik';
 import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { fDateISO } from '../../utils/formatTime';
 import { fetchEvents, createTicket } from '../../api/index';
 import PopupModal from './Popup';
 
@@ -76,9 +77,7 @@ export default function CreateTicketForm({ open, setOpen }) {
                   ...values,
                   quantity: +values.quantity,
                   price: +price,
-                  date: `${date.$y}-${date.$M < 10 ? `0${date.$M + 1}` : date.$M + 1}-${
-                    date.$D < 10 ? `0${date.$D}` : date.$D
-                  }`,
+                  date: fDateISO(date),
                 },
                 setStatusCreate
               );

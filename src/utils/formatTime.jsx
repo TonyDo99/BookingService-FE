@@ -25,3 +25,7 @@ export function fToNow(date) {
       })
     : '';
 }
+
+export function fDateISO(date) {
+  return `${date.$y}-${date.$M < 10 ? `0${date.$M + 1}` : date.$M + 1}-${date.$D < 10 ? `0${date.$D}` : date.$D}`;
+}

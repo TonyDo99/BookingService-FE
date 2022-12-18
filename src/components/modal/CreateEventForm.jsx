@@ -17,6 +17,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
+import { fDateISO } from '../../utils/formatTime';
 import { createEvent } from '../../api/index';
 import PopupModal from './Popup';
 
@@ -60,12 +61,8 @@ export default function CreateEventForm({ open, setOpen }) {
                 {
                   ...values,
                   published: JSON.parse(values.published),
-                  startDate: `${startDate.$y}-${startDate.$M < 10 ? `0${startDate.$M + 1}` : startDate.$M + 1}-${
-                    startDate.$D < 10 ? `0${startDate.$D}` : startDate.$D
-                  }`,
-                  endDate: `${endDate.$y}-${endDate.$M < 10 ? `0${endDate.$M + 1}` : endDate.$M + 1}-${
-                    endDate.$D < 10 ? `0${endDate.$D}` : endDate.$D
-                  }`,
+                  startDate: fDateISO(startDate),
+                  endDate: fDateISO(endDate),
                 },
                 setStatusCreate
               );
