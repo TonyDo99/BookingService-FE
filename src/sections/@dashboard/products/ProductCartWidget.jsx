@@ -7,6 +7,7 @@ import { Badge } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { findUser } from '../../../api';
 import Iconify from '../../../components/iconify';
+import { TemporaryDrawer } from '../../../components/modal';
 
 // ----------------------------------------------------------------------
 
@@ -34,8 +35,9 @@ const StyledRoot = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function CartWidget() {
-  const [account, setAccount] = useState({});
+  const [account, setAccount] = useState(0);
 
+  const [openCart, setOpenCart] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,9 +48,18 @@ export default function CartWidget() {
 
   return (
     <StyledRoot>
-      <Badge showZero={false} badgeContent={5} color="primary" max={99}>
-        <Iconify icon="eva:shopping-cart-fill" width={24} height={24} />
-      </Badge>
+      {account && (
+        <Badge
+          showZero={false}
+          badgeContent={account.tickets.length}
+          color="primary"
+          max={99}
+          onClick={() => setOpenCart(true)}
+        >
+          <Iconify icon="eva:shopping-cart-fill" width={24} height={24} />
+        </Badge>
+      )}
+      {openCart && <TemporaryDrawer open={openCart} setOpen={setOpenCart} />}
     </StyledRoot>
   );
 }

@@ -76,7 +76,9 @@ export default function CreateTicketForm({ open, setOpen }) {
                   ...values,
                   quantity: +values.quantity,
                   price: +price,
-                  date: `${date.$y}-${date.$M + 1}-${date.$D < 10 ? `0${date.$D}` : date.$D}`,
+                  date: `${date.$y}-${date.$M < 10 ? `0${date.$M + 1}` : date.$M + 1}-${
+                    date.$D < 10 ? `0${date.$D}` : date.$D
+                  }`,
                 },
                 setStatusCreate
               );

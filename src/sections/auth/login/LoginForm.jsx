@@ -1,13 +1,11 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup'; // @mui
 import jwtDecode from 'jwt-decode';
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { Link, Stack, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import { login } from '../../../api/index';
-import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 const SignInSchema = Yup.object().shape({
@@ -22,8 +20,6 @@ const SignInSchema = Yup.object().shape({
 
 export default function LoginForm() {
   const navigate = useNavigate();
-
-  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
@@ -72,16 +68,7 @@ export default function LoginForm() {
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
                 value={props.values.password}
-                type={showPassword ? 'text' : 'password'}
-                inputprops={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+                type="password"
               />
               <span className="animate-pulse text-red-400 mt-1">
                 <ErrorMessage name="password" />

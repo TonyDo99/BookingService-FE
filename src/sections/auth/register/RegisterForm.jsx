@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup'; // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { Link, Stack, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import { register } from '../../../api/index';
-import Iconify from '../../../components/iconify';
 import ModalResponse from '../../../components/modal';
 
 // ----------------------------------------------------------------------
@@ -27,7 +26,6 @@ const SignInSchema = Yup.object().shape({
 export default function RegisterForm() {
   const [statusRegister, setStatusRegister] = useState(null);
 
-  const [showPassword, setShowPassword] = useState(false);
   return (
     <>
       <Formik
@@ -65,11 +63,11 @@ export default function RegisterForm() {
               </span>
               <TextField
                 name="email"
-                type="email"
+                type="mobilePhone"
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
                 value={props.values.email}
-                label="Email address"
+                label="Email"
               />
               <span className="animate-pulse text-red-400 mt-1">
                 <ErrorMessage name="email" />
@@ -80,16 +78,7 @@ export default function RegisterForm() {
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
                 value={props.values.password}
-                type={showPassword ? 'text' : 'password'}
-                inputprops={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+                type="password"
               />
               <span className="animate-pulse text-red-400 mt-1">
                 <ErrorMessage name="password" />
@@ -105,6 +94,11 @@ export default function RegisterForm() {
             <LoadingButton fullWidth size="large" type="submit" variant="contained">
               Register
             </LoadingButton>
+            <div className="pt-3">
+              <LoadingButton fullWidth size="large" type="submit" variant="outlined" href="/login">
+                Login
+              </LoadingButton>
+            </div>
           </Form>
         )}
       </Formik>
