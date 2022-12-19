@@ -26,8 +26,19 @@ Booking service
 
 ```bash
 # development
-run docker-compose up
+yarn install
+
+yarn start
 ```
+
+## About
+
+Account user when register is will be a normal user, admin_user is won't not automatically need to set premission. But u can go to hosting and sign in with account
+
+username: dotanphat@gmail.com
+password: Blue\*Berry&1999
+
+-> This account is admin_user
 
 ## Getting started
 
