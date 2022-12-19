@@ -6,13 +6,11 @@ import { Button, Container, Stack, Typography } from '@mui/material';
 import { CreateTicketForm } from '../components/modal';
 import { fetchListTickets } from '../api/index';
 import Iconify from '../components/iconify';
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
+import { ProductList } from '../sections/@dashboard/products';
 
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
-  const [openFilter, setOpenFilter] = useState(false);
-
   const [tickets, setTickets] = useState([]);
 
   const [openForm, setOpenForm] = useState(false);
@@ -23,13 +21,6 @@ export default function ProductsPage() {
     })();
   }, []);
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
   return (
     <>
       <Helmet>
