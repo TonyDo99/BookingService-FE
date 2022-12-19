@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_HOST = process.env.API || 'http://localhost:4000/api';
+const API_HOST = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:4000/api';
 
 export const fetchUser = async (navigate) => {
   try {
